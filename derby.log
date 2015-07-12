@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Jul 12 21:01:21 ICT 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-014e-8291-f7aa-0000153c36c0 
+on database directory /tmp/studentdb with class loader WebAppClassLoader=Archetype Created Web Application@2b1a97e 
+Loaded from file:/home/longlx/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_45-internal-b14
+user.dir=/home/longlx/Java/spring-mvc
+os.name=Linux
+os.arch=amd64
+os.version=3.13.0-55-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

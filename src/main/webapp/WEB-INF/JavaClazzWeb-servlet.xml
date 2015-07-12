@@ -1,0 +1,80 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<mvc:annotation-driven/>
+	<context:component-scan base-package="edu.java.spring.controller"/>
+
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="order" value="1" />
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+	</bean>
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+		  <list>
+				<value>/WEB-INF/tiles/definitions.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="3"/>
+		<property name="prefix" value="/student/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+	<bean id="xsltViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="order" value="2"/>
+		<property name="basename" value="views"/>
+	</bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="message"/>
+	</bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+		<property name="url" value="jdbc:derby:/tmp/studentdb;create=true"/>
+		<property name="username" value=""/>
+		<property name="password" value=""/>
+	</bean>
+
+	<bean id="studentDAO" class="edu.java.spring.dao.StudentDAO">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="insertSQL" value="insert into Student (name, age) values(?, ?)"/>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="studentDAO"/>
+		</property>
+		<property name="targetMethod">
+			<value>createTableIfNotExist</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>student</value>
+				<value>create table student (
+				id bigint primary key
+				generated always as identity (start with 1, increment by 1),
+				name varchar(1000),
+				age integer)</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="studentMapper" class="edu.java.spring.model.StudentMapper" />
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1000000" />
+	</bean>
+
+</beans>
